@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Alegreya+Sans:100,300,400,500,700,800,900');
+
+/* a { text-decoration: none; } */
+/* h1, h2, h3, h4, h5 { padding: 0; } */
+/* ul { margin: 0; } */
+
+/* Bootstrap size
+Extra small < 576px = .col-, Max container width None (auto) - Phone
+Small ≥ 576px = .col-sm-, Max container width 540px (sm) - Phone/Tablet
+Medium ≥ 768px = .col-md-, Max container width 720px (md) - Tablet
+Large ≥ 992px = .col-lg-, Max container width 960px (lg) - Desktop
+Extra large ≥ 1200px = .col-xl-, Max container width 1140px (xl) - TV
+*/
+
+
+
+html, body {
+  background: #ffffff;
+  height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+
+/*---------- Extra small devices (Phone <= 576px) - auto ----------*/
+
+/*----------- End extra small devices (Phones < 576px) ------------*/
+
+
+
+
+
+/* Small devices (Phone/Tablet >= 576px) - "min-width: 576px" (sm) */
+@media screen and (min-width: 576px) {
+  .contacts_wrap p {
+    margin: 0 10px;
+  }
+
+  .header_search input {
+    width: 100%;
+  }
+}
+/*----------------- End media "min-width: 576px" ------------------*/
+
+
+
+
+
+/*--- Medium devices (Tablet >= 768px) - "min-width: 768px" (md) --*/
+@media screen and (min-width: 768px) {
+  /* take footer down */
+  .wrapper {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+
+  footer {
+    flex: 0 0 auto;
+  }
+  /* take footer down end */
+}
+/*----------------- End media "min-width: 768px" ------------------*/
+
+
+
+
+
+/*--- Large devices (Desktop >= 992px) - "min-width: 970px" (lg) --*/
+@media screen and (min-width: 970px) {
+
+}
+/*----------------- End media "min-width: 992px" ------------------*/
+
+
+
+
+
+/*- Extra large devices (TV >= 1200px) - "min-width: 1170px" (xl) -*/
+@media screen and (min-width: 1170px) {
+
+}
+/*----------------- End media "min-width: 1200px" -----------------*/
+
+
+
+
+
+
+
+
+
+
+/*------- Borders -------*/
+.b_red {
+  border: solid 2px red;
+}
+.b_blue {
+  border: solid 2px blue;
+}
+.b_green {
+  border: solid 2px green;
+}
+.b_black {
+  border: solid 2px black;
+}
+.b_white {
+  border: solid 2px white;
+}
+/*------ End Borders ------*/
+
+
+/*-------- Text color --------*/
+.tc_black {
+  color: black;
+}
+.tc_lieghtblack {
+  color: #333333;
+}
+.tc_white {
+  color: white;
+}
+.tc_silver {
+  color: silver;
+}
+.tc_grey {
+  color: #A1A1A1;
+}
+.tc_darkgrey {
+  color: #7c7c7e;
+}
+.tc_red {
+  color: red;
+}
+/*------ End Text color ------*/
+
+
+
+/*-------- Text color --------*/
+.ts_small {
+  font-size: 0.8em;
+}
+/*------ End Text color ------*/
