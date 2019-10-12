@@ -25,6 +25,16 @@ h1, h2, h3, h4, h5, h6 {
 
 
 /*---------- Extra small devices (Phone <= 576px) - auto ----------*/
+.text_box_wrapper {
+  height: auto;
+}
+textarea {
+  resize: none;
+  width: 575px;
+  height: 65px;
+  font-size: 0.8em;
+}
+
 
 /*----------- End extra small devices (Phones < 576px) ------------*/
 
@@ -34,13 +44,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Small devices (Phone/Tablet >= 576px) - "min-width: 576px" (sm) */
 @media screen and (min-width: 576px) {
-  .contacts_wrap p {
-    margin: 0 10px;
-  }
 
-  .header_search input {
-    width: 100%;
-  }
 }
 /*----------------- End media "min-width: 576px" ------------------*/
 
@@ -51,21 +55,10 @@ h1, h2, h3, h4, h5, h6 {
 /*--- Medium devices (Tablet >= 768px) - "min-width: 768px" (md) --*/
 @media screen and (min-width: 768px) {
   /* take footer down */
-  .wrapper {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-    padding: 0;
-    margin: 0;
+  .chat_messages {
+    height: 80vh;
   }
 
-  main {
-    flex: 1 0 auto;
-  }
-
-  footer {
-    flex: 0 0 auto;
-  }
   /* take footer down end */
 }
 /*----------------- End media "min-width: 768px" ------------------*/

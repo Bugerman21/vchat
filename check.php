@@ -10,6 +10,8 @@ include("db.php");
  */
 // Trim - удаляет пробелы
 // FILTER_SANITIZE_STRING - указывает/принимает тип фильрации (в данном случае фильтруем как обычную строку)
+// filter_var() - Фильтрует переменную с помощью определенного фильтра
+
 $name = filter_var(trim($_POST['name']),
     FILTER_SANITIZE_STRING);
 
@@ -24,11 +26,25 @@ $login = filter_var(trim($_POST['login']),
 
 // Пароли никогда не фильтруется он и задуман для того чтобы состоять из любых символов
 $originalUserPSW = $_POST['password'];
+$confirmPSW = $_POST['pswConfirm'];
 
 $email = filter_var(trim($_POST['email']),
     FILTER_SANITIZE_STRING);
 
-$form = $_POST['form'];
+$form = $_POST['form']; /* Log In Form */
+
+// filter_var() - Фильтрует переменную с помощью определенного фильтра
+// trim() - Удаляет пробелы (или другие символы) из начала и конца строки
+// htmlspecialchars() - Преобразует специальные символы в HTML-сущности
+/** Пример
+ * & (амперсанд) - заменится на &amp;
+ * " (двойные кавычки) - заменится на &quot;, если не установлена ENT_NOQUOTES
+ * < (меньше) - заменится на &lt;
+ * и так далее...
+ */
+// есть еще htmlentities() Эта функция идентична htmlspecialchars() за исключением того, что htmlentities() преобразует все символы в соответствующие HTML-сущности (для тех символов, для которых HTML-сущности существуют).
+// stripslashes() - Удаляет экранирование символов, пример: $str = "Ваc зовут O\'reilly?"; --> выводит: Вас зовут O'reilly?
+$textBox = filter_var(htmlentities(stripslashes($_POST['text_box'])));
 
 /*================================ Проверки ===================================*/
 /*=============================================================================*/
@@ -53,6 +69,9 @@ if($form == "reg") {
     } // Проверяем длину пароля
     else if (mb_strlen($originalUserPSW) < 4 || mb_strlen($originalUserPSW) > 20) {
         echo "The Password mast be not less than 4 chars and not more than 20 chars! <br><a href='index.php'>Log In</a> | <a href='registration.php'>Registration</a>";
+    }
+    else if ($originalUserPSW != $confirmPSW) {
+        echo "The Password do not match! <br><a href='index.php'>Log In</a> | <a href='registration.php'>Registration</a>";
     } // Проверяем длину эл.почты
     else if (mb_strlen($email) < 4 || mb_strlen($email) > 40) {
         echo "The Email mast be not less than 4 chars and not more than 40 chars! <br><a href='index.php'>Log In</a> | <a href='registration.php'>Registration</a>";
@@ -65,7 +84,8 @@ if($form == "reg") {
 
         //Если данные успешно занесены в таблицу
         if ($result == true) {
-            echo "Вы успешно зарегистрированы! <br><a href='index.php'>На главную</a>";
+            // echo "Вы успешно зарегистрированы! <br><a href='index.php'>На главную</a>";
+            header("location: index.php");
         } //Если не так, то выводим ошибку
         else {
             echo "Error! ----> ";
@@ -102,12 +122,28 @@ if($form == "login") {
                //  $has_session = session_status();
                 //echo $has_session;
 
-                echo "Congratulation! <br><a href='index.php'>Back to Home page</a>";
+                // echo "Congratulation! <br><a href='index.php'>Back to Home page</a>";
+                header("location: index.php");
             }
             else {
                 echo "Wrong username or password!";
             }
         //}
+    }
+}
+
+
+// Chat box - sending messages
+if($textBox != "") {
+    //Вставляем данные в БД
+    $result = $mysql->query(" INSERT INTO `messages` (`message_content`) VALUES('$textBox') ");
+
+    //Если данные успешно занесены в таблицу
+    if ($result == true) {
+        echo "Message sent successfully <br><a href='index.php'>На главную</a>";
+    } //Если не так, то выводим ошибку
+    else {
+        echo "Error! ----> ";
     }
 }
 

@@ -55,6 +55,7 @@ session_start();
                 <input type="text" class="fadeIn" name="nickName" placeholder="Nickname">
                 <input type="text" class="fadeIn" name="login" placeholder="Login">
                 <input type="password" class="fadeIn" name="password" placeholder="Password">
+                <input type="password" class="fadeIn" name="pswConfirm" placeholder="Confirm password">
                 <input type="text" class="fadeIn" name="email" placeholder="E-Mail">
                 <input type="hidden" name="form" value="reg"></input>
                 <input type="submit" class="fadeIn" value="Register">
