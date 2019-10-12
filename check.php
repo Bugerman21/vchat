@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 include("db.php");
 // var_dump($_POST);
 
@@ -101,7 +100,7 @@ if($form == "login") {
         echo "All fields are required! <br><a href='index.php'>Log In</a> | <a href='registration.php'>Registration</a>";
     }
     else {
-        $result = $mysql->query("SELECT * FROM `users` WHERE `login` = '$login' ");
+        $result = $mysql->query(" SELECT * FROM `users` WHERE `login` = '$login' ");
 
         // mysqli_fetch_assoc - Обрабатывает ряд результата запроса и возвращает ассоциативный массив.
         // mysqli_fetch_array --  Обрабатывает ряд результата запроса, возвращая ассоциативный массив, численный массив или оба.
@@ -149,4 +148,3 @@ if($textBox != "") {
 
 
  // $mysql->close();
-?>

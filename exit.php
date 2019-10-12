@@ -11,4 +11,4 @@ session_destroy();
 
 //Переадресовываем на главную
 header("location: index.php");
-?>
+

@@ -9,4 +9,3 @@
   if(!(isset($_SESSION["id"]))){
     header('Location: http://localhost/pet-store/login.php');
   }
-?>

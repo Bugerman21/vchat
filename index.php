@@ -26,7 +26,6 @@ session_start();
     <!--===================================================================================================-->
 
     <!-- My styles CSS -->
-   <!-- <link rel="stylesheet" type="text/css" href="css/authorize_css/main.css">-->
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <!--===================================================================================================-->
 
@@ -35,19 +34,12 @@ session_start();
     <link rel="icon" type="image/png" href="Chat.ico">
     <!--===================================================================================================-->
 </head>
-<!--
-<script type="text/javascript">
-setTimeout("window.location.reload()",5000);//Обновление раз в 5 секунд
-</script>
--->
+
 <body class="">
 <div class="wrapper">
     <?php /*-------------------------------------------------------------> OPEN PHP */
-    // Если отсутствуют логин и пароль,
-    // отображаем форму входа и регистрации
-    if (!isset($_SESSION['login']) && !isset($_SESSION['password'])) {
+    if (!isset($_SESSION['login']) && !isset($_SESSION['password'])) { // Если отсутствуют логин и пароль, отображаем форму входа и регистрации
         /*---------------------------------------------------------------> CLose PHP */ ?>
-
 
 
         <!--======= Log In form =====-->
@@ -60,9 +52,9 @@ setTimeout("window.location.reload()",5000);//Обновление раз в 5 �
             <!-- Login Form -->
             <form action="check.php" method="post">
                 <input type="text" name="login" placeholder="Login">
-                <input type="password"  name="password" placeholder="Password">
+                <input type="password" name="password" placeholder="Password">
                 <input type="hidden" name="form" value="login">
-                <input type="submit"  value="Log In">
+                <input type="submit" value="Log In">
             </form>
 
             <!-- Remind Password / Log In -->
@@ -74,7 +66,6 @@ setTimeout("window.location.reload()",5000);//Обновление раз в 5 �
 
         <?php /*---------------------------------------------------------> OPEN PHP */
     } else {
-        // session_destroy();
         /*---------------------------------------------------------------> CLose PHP */ ?>
 
 
@@ -83,7 +74,9 @@ setTimeout("window.location.reload()",5000);//Обновление раз в 5 �
             <h1 class="text-center t_darkgrey">VChat</h1>
         </header>
 
+        <!-- MAIN -->
         <main class="container-fluid p-0 m-0 d-flex">
+
             <aside class="b_blue">
                 <!-- Chat header -->
                 <section>
@@ -100,8 +93,8 @@ setTimeout("window.location.reload()",5000);//Обновление раз в 5 �
                     <div class="chat_logo mx-3">Chat avatar</div>
                     <h4>Chat name</h4>
                 </section>
-                <section class="chat_messages">
-                    chat_messages
+                <section id="chatMsg" class="chat_messages">
+
                 </section>
                 <section class="b_green text_box_wrapper ">
                     <form action="check.php" method="post" class="d-flex">
@@ -112,13 +105,14 @@ setTimeout("window.location.reload()",5000);//Обновление раз в 5 �
             </article>
         </main>
 
+        <!-- FOOTER -->
         <footer>
             <a href="exit.php">Exit</a>
         </footer>
 
         <?php /*---------------------------------------------------------> OPEN PHP */
     }
-    /*-------------------------------------------------------------------> CLose PHP */ ?>
+    /*-------------------------------------------------------------------> CLOSE PHP */ ?>
 </div><!-- .wrapper -->
 
 
@@ -131,5 +125,36 @@ setTimeout("window.location.reload()",5000);//Обновление раз в 5 �
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+
+<script>
+    $.ajax({
+       // type: "POST",
+        url: "chat_messages.php",
+        success: function(result) {
+            $('#chatMsg').html(result);
+        }
+    });
+</script>
+
+<script>
+    // Обновление раз в 3 секунд
+    // window.location.reload()
+    //setTimeout
+    setInterval(function(){
+console.log("im here");
+        $.ajax({
+            // type: "POST",
+            url: "chat_messages.php",
+            success: function(result) {
+                $('#chatMsg').html(result);
+            }
+        });
+
+        },3000);
+</script>
+
 </body>
 </html>
