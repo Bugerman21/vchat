@@ -43,7 +43,6 @@ $form = $_POST['form']; /* Log In Form */
  */
 // есть еще htmlentities() Эта функция идентична htmlspecialchars() за исключением того, что htmlentities() преобразует все символы в соответствующие HTML-сущности (для тех символов, для которых HTML-сущности существуют).
 // stripslashes() - Удаляет экранирование символов, пример: $str = "Ваc зовут O\'reilly?"; --> выводит: Вас зовут O'reilly?
-$textBox = filter_var(htmlentities(stripslashes($_POST['text_box'])));
 
 /*================================ Проверки ===================================*/
 /*=============================================================================*/
@@ -133,6 +132,7 @@ if($form == "login") {
 
 
 // Chat box - sending messages
+/*
 if($textBox != "") {
     //Вставляем данные в БД
     $result = $mysql->query(" INSERT INTO `messages` (`message_content`) VALUES('$textBox') ");
@@ -145,6 +145,6 @@ if($textBox != "") {
         echo "Error! ----> ";
     }
 }
-
+*/
 
  // $mysql->close();

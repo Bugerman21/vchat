@@ -27,7 +27,7 @@ session_start();
 
 
     <!-- Web icon -->
-    <link rel="icon" type="image/png" href="Chat.ico">
+    <link rel="icon" type="image/png" href="chat.ico">
     <!--===================================================================================================-->
 </head>
 <body class="">

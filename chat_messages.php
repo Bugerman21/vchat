@@ -1,5 +1,4 @@
 <?php
-session_start();
 include("db.php");
 
 $result = $mysql->query(" SELECT * FROM `messages` WHERE 'message_content' != '' ");

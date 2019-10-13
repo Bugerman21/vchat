@@ -1,9 +1,6 @@
 <?php
-// Запускаем сессию для работы с кукис файлами
 session_start();
-// var_dump($_SESSION);
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,32 +11,25 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--===================================================================================================-->
 
+    <!-- Web icon -->
+    <link rel="icon" type="image/png" href="chat.ico">
 
     <!-- Bootstrap CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-    <!--===================================================================================================-->
-
     <!-- fontawesome-free-5.0. CSS -->
     <link href="fontawesom/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet">
-    <!--===================================================================================================-->
-
     <!-- My styles CSS -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <!--===================================================================================================-->
-
-
-    <!-- Web icon -->
-    <link rel="icon" type="image/png" href="Chat.ico">
-    <!--===================================================================================================-->
 </head>
 
 <body class="">
 <div class="wrapper">
-    <?php /*-------------------------------------------------------------> OPEN PHP */
-    if (!isset($_SESSION['login']) && !isset($_SESSION['password'])) { // Если отсутствуют логин и пароль, отображаем форму входа и регистрации
-        /*---------------------------------------------------------------> CLose PHP */ ?>
+    <?php
+    /* --======= If login & password is not exist in cookies, show log in form  =======-- */
+    /* --=================================== Start ====================================-- */
+    if (!isset($_SESSION['login']) && !isset($_SESSION['password'])) {
+        ?>
 
 
         <!--======= Log In form =====-->
@@ -64,10 +54,13 @@ session_start();
             </div>
         </div>
 
-        <?php /*---------------------------------------------------------> OPEN PHP */
-    } else {
-        /*---------------------------------------------------------------> CLose PHP */ ?>
-
+        <?php
+    }
+    /* --================================ End ==================================-- */
+    else {
+        /* --====================== Else show main content  ==========================-- */
+        /* --=============================== Start ===================================-- */
+        ?>
 
         <!-- HEADER -->
         <header class="b_red container-fluid">
@@ -96,10 +89,10 @@ session_start();
                 <section id="chatMsg" class="chat_messages">
 
                 </section>
-                <section class="b_green text_box_wrapper ">
-                    <form action="check.php" method="post" class="d-flex">
+                <section class="b_green text_box_wrapper">
+                    <form id="sendMSG" action="send_messages.php" method="post" class="d-flex">
                         <textarea name="text_box" placeholder="Type a message..." autofocus></textarea>
-                        <input type="submit" value="Send message">
+                        <input type="submit" value="Send message" this.form.reset()>
                     </form>
                 </section>
             </article>
@@ -110,9 +103,10 @@ session_start();
             <a href="exit.php">Exit</a>
         </footer>
 
-        <?php /*---------------------------------------------------------> OPEN PHP */
+        <?php
     }
-    /*-------------------------------------------------------------------> CLOSE PHP */ ?>
+    /* --================================ End ==================================-- */
+    ?>
 </div><!-- .wrapper -->
 
 
@@ -128,32 +122,45 @@ session_start();
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 
-
-<script>
-    $.ajax({
-       // type: "POST",
-        url: "chat_messages.php",
-        success: function(result) {
-            $('#chatMsg').html(result);
-        }
-    });
+<!-- Send message -->
+<script type="text/javascript">
+    //$(document).ready(function () {
+        $('#sendMSG').submit(function(e) {
+            console.log("I am here");
+            e.preventDefault();
+            var data = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                url: "send_messages.php",
+                data: data,
+                success: function (result) {
+                    setTimeout(function () {
+                        $.ajax({
+                            url: "chat_messages.php",
+                            success: function (result) {
+                                // clear form fields
+                                $("#sendMSG").trigger('reset');
+                                $('#chatMsg').html(result);
+                            }
+                        });
+                    }, 0);
+                }
+            });
+        });
+    //});
 </script>
 
-<script>
-    // Обновление раз в 3 секунд
-    // window.location.reload()
-    //setTimeout
-    setInterval(function(){
-console.log("im here");
+<!-- Refresh chat messages -->
+<script  type="text/javascript">
+    // Every 5 seconds, calling to ajax, which replaces in the div a updated content (loop)
+    setInterval(function () {
         $.ajax({
-            // type: "POST",
             url: "chat_messages.php",
-            success: function(result) {
+            success: function (result) {
                 $('#chatMsg').html(result);
             }
         });
-
-        },3000);
+    }, 5000);
 </script>
 
 </body>
