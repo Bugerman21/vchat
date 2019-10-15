@@ -51,7 +51,7 @@ $form = $_POST['form']; /* Log In Form */
 
 
 // Registation Form
-if($form == "reg") {
+if ($form == "reg") {
     // Проверяем длину имени
     if (mb_strlen($name) < 4 || mb_strlen($name) > 20) {
         echo "The Name mast be not less than 4 chars and not more than 20 chars! <br><a href='index.php'>Log In</a> | <a href='registration.php'>Registration</a>";
@@ -67,8 +67,7 @@ if($form == "reg") {
     } // Проверяем длину пароля
     else if (mb_strlen($originalUserPSW) < 4 || mb_strlen($originalUserPSW) > 20) {
         echo "The Password mast be not less than 4 chars and not more than 20 chars! <br><a href='index.php'>Log In</a> | <a href='registration.php'>Registration</a>";
-    }
-    else if ($originalUserPSW != $confirmPSW) {
+    } else if ($originalUserPSW != $confirmPSW) {
         echo "The Password do not match! <br><a href='index.php'>Log In</a> | <a href='registration.php'>Registration</a>";
     } // Проверяем длину эл.почты
     else if (mb_strlen($email) < 4 || mb_strlen($email) > 40) {
@@ -92,59 +91,6 @@ if($form == "reg") {
 }
 
 
-// Log In Form
-if($form == "login") {
-    // Проверяем поля на пустоту
-    if (mb_strlen($login) == 0 || mb_strlen($originalUserPSW) == 0) {
-        echo "All fields are required! <br><a href='index.php'>Log In</a> | <a href='registration.php'>Registration</a>";
-    }
-    else {
-        $result = $mysql->query(" SELECT * FROM `users` WHERE `login` = '$login' ");
-
-        // mysqli_fetch_assoc - Обрабатывает ряд результата запроса и возвращает ассоциативный массив.
-        // mysqli_fetch_array --  Обрабатывает ряд результата запроса, возвращая ассоциативный массив, численный массив или оба.
-        /*
-         * mysqli_fetch_assoc() как сказали возвращает результат в виде ассоциативного массива.
-         * mysqli_fetch_array() - тип возвращаемого массива может быть задан во втором необязательном параметре.
-         * ------------------------------------------------------------------------------------------------------------
-         * mysqli_fetch_assoc - массив только вида $arr['key1']
-         * mysqli_fetch_array - можно обращаться как $arr['key1'], так и $arr[0] (если запускать без второго ключа)
-         */
-        $row = $result->fetch_assoc();
-
-        //while($row = $result->fetch_assoc()){
-            if(($login == $row['login']) && (password_verify($originalUserPSW, $row['password']))) {
-                $_SESSION["username"] = $username;
-                $_SESSION["password"] = $originalUserPSW;
-
-               //  $has_session = session_status();
-                //echo $has_session;
-
-                // echo "Congratulation! <br><a href='index.php'>Back to Home page</a>";
-                header("location: index.php");
-            }
-            else {
-                echo "Wrong username or password!";
-            }
-        //}
-    }
-}
 
 
-// Chat box - sending messages
-/*
-if($textBox != "") {
-    //Вставляем данные в БД
-    $result = $mysql->query(" INSERT INTO `messages` (`message_content`) VALUES('$textBox') ");
-
-    //Если данные успешно занесены в таблицу
-    if ($result == true) {
-        echo "Message sent successfully <br><a href='index.php'>На главную</a>";
-    } //Если не так, то выводим ошибку
-    else {
-        echo "Error! ----> ";
-    }
-}
-*/
-
- // $mysql->close();
+// $mysql->close();

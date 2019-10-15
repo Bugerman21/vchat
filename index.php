@@ -1,5 +1,6 @@
 <?php
 session_start();
+include("db.php");
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +32,6 @@ session_start();
     if (!isset($_SESSION['login']) && !isset($_SESSION['password'])) {
         ?>
 
-
         <!--======= Log In form =====-->
         <!--=========================-->
         <div id="formContent">
@@ -40,7 +40,7 @@ session_start();
             <h6>Please Log In</h6>
 
             <!-- Login Form -->
-            <form action="check.php" method="post">
+            <form id="login" action="login.php" method="post">
                 <input type="text" name="login" placeholder="Login">
                 <input type="password" name="password" placeholder="Password">
                 <input type="hidden" name="form" value="login">
@@ -62,26 +62,42 @@ session_start();
         /* --=============================== Start ===================================-- */
         ?>
 
-        <!-- HEADER -->
-        <header class="b_red container-fluid">
-            <h1 class="text-center t_darkgrey">VChat</h1>
-        </header>
-
         <!-- MAIN -->
         <main class="container-fluid p-0 m-0 d-flex">
 
             <aside class="b_blue">
-                <!-- Chat header -->
+                <!-- User panel -->
+                <section class="d-flex b_black">
+                    <!-- Click on user avatar and will show big picture + information about him -->
+                    <!-- will option change info -->
+                    <div class="mx-3">
+                        <img src="" alt="User avatar">
+                        <?php
+                        $result = $mysql->query(" SELECT `nickname` FROM `users` WHERE `id` = '23' ");
+                        $row  = $result->fetch_assoc();
+                        echo "<h5 class='mb-1 font-weight-bold'>".$row["nickname"]."</h5>";
+                        ?>
+                    </div>
+                    <!-- Will open window with create chat form - chat name, avatar, privet or not  -->
+                    <!-- subname for chat - optional  -->
+                    <a href="#" class="mr-1" title="Create chat"><i class="fas fa-plus"></i></a>
+                </section>
+
+                <!-- Chats list -->
                 <section>
-                    <img src="" alt="qq" class="chat_logo">
-                    <div>
-                        <h6>Chat name</h6>
-                        <p class="ts_small">Last message in the chat</p>
+                    <div class="m-2">
+                        <?php
+                        $result = $mysql->query(" SELECT * FROM `chat` WHERE `chat_name` != '' ");
+                        while($row  = $result->fetch_assoc()) {
+                            echo "<h6 class='chat_name' onclick='chatNameFunc(\"".$row["chat_id"]."\")'> - "   .$row["chat_name"].    "</h6>";
+                        }
+                        ?>
                     </div>
                 </section>
             </aside>
 
             <article class="q flex-md-grow-1">
+                <!-- Chat header -->
                 <section class="chat_header d-flex b_black">
                     <div class="chat_logo mx-3">Chat avatar</div>
                     <h4>Chat name</h4>
@@ -100,7 +116,7 @@ session_start();
 
         <!-- FOOTER -->
         <footer>
-            <a href="exit.php">Exit</a>
+            <a class="mx-2" href="exit.php">Exit <i class="fas fa-sign-out-alt"></i></a>
         </footer>
 
         <?php
@@ -121,19 +137,43 @@ session_start();
         crossorigin="anonymous"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
+<!-- Login -->
+<script type="text/javascript">
+    $('#login').submit(function (e) {
+        e.preventDefault();
+        var data = $(this).serialize();
+        $.ajax({
+            type: "POST",
+            url: "login.php",
+            data: data,
+            success: function () {
+                location.reload();
+                console.log("I am here ! - 1");
+                setTimeout(function () {
+                    $.ajax({
+                        url: "chat_messages.php",
+                        done: function (result) {
+                            console.log("I am here ! - 2");
+                            $('#chatMsg').html(result);
+                        }
+                    });
+                }, 0);
+            }
+        });
+    });
+</script>
 
 <!-- Send message -->
 <script type="text/javascript">
     //$(document).ready(function () {
         $('#sendMSG').submit(function(e) {
-            console.log("I am here");
             e.preventDefault();
             var data = $(this).serialize();
             $.ajax({
                 type: "POST",
                 url: "send_messages.php",
                 data: data,
-                success: function (result) {
+                success: function () {
                     setTimeout(function () {
                         $.ajax({
                             url: "chat_messages.php",
@@ -151,8 +191,9 @@ session_start();
 </script>
 
 <!-- Refresh chat messages -->
-<script  type="text/javascript">
+<script type="text/javascript">
     // Every 5 seconds, calling to ajax, which replaces in the div a updated content (loop)
+    /*
     setInterval(function () {
         $.ajax({
             url: "chat_messages.php",
@@ -160,7 +201,30 @@ session_start();
                 $('#chatMsg').html(result);
             }
         });
-    }, 5000);
+    }, 10000);
+     */
+</script>
+
+<!-- Chat name onclick event -->
+<script type="text/javascript">
+    function chatNameFunc(temp) {
+        document.getElementsByClassName("chat_name").innerHTML = chatRefresh(temp);
+    }
+
+    function chatRefresh(temp) {
+        setTimeout(function () {
+            $.ajax({
+                method: "POST",
+                url: "chat_messages.php",
+                data: {
+                    "chat_id": temp
+                },
+                success: function (result) {
+                    $('#chatMsg').html(result);
+                }
+            });
+        }, 0);
+    }
 </script>
 
 </body>

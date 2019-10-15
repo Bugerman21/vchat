@@ -1,7 +1,9 @@
 <?php
 include("db.php");
 
-$result = $mysql->query(" SELECT * FROM `messages` WHERE 'message_content' != '' ");
+$q = $_POST['chat_id'];
+
+$result = $mysql->query(" SELECT * FROM `messages` WHERE `chat_id` = '$q' ");
 while($row  = $result->fetch_assoc()) {
     echo $row["message_content"]."<br>";
 }
