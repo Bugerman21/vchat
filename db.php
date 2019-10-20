@@ -1,14 +1,14 @@
 <?php
-  $servername = "localhost";
-  $username = "root";
-  $password = "";
-  $dbname = "vchat";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "vchat";
 
-  // Create connection
-  $mysql = mysqli_connect($servername, $username, $password, $dbname);
+// Create connection
+$mysql = mysqli_connect($servername, $username, $password, $dbname);
 
-  // Check connection
-  if (!$mysql) {
+// Check connection
+if (!$mysql) {
     die("Connection failed: " . mysqli_connect_error());
-  }
-  //echo "Connected successfully";
+}
+//echo "Connected successfully";

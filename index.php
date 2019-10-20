@@ -55,8 +55,7 @@ include("db.php");
         </div>
 
         <?php
-    }
-    /* --================================ End ==================================-- */
+    } /* --================================ End ==================================-- */
     else {
         /* --====================== Else show main content  ==========================-- */
         /* --=============================== Start ===================================-- */
@@ -72,7 +71,7 @@ include("db.php");
                         <img src="" alt="User avatar">
                         <?php
                         // $result = $mysql->query(" SELECT `nickname` FROM `users` WHERE `id` = '23' ");
-                        echo "<h5 class='mb-1 font-weight-bold'>".$_SESSION["username"]."</h5>";
+                        echo "<h5 class='mb-1 font-weight-bold'>" . $_SESSION["username"] . "</h5>";
                         ?>
                     </div>
                     <!-- Will open window with create chat form - chat name, avatar, privet or not  -->
@@ -85,8 +84,8 @@ include("db.php");
                     <div class="m-2">
                         <?php
                         $result = $mysql->query(" SELECT * FROM `chat` WHERE `chat_name` != '' ");
-                        while($row  = $result->fetch_assoc()) {
-                            echo "<h6 class='chat_name' onclick='chatNameFunc(\"".$row["chat_id"]."\")'> - "   .$row["chat_name"].    "</h6>";
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<h6 class='chat_name' onclick='chatNameFunc(\"" . $row["chat_id"] . "\")'> - " . $row["chat_name"] . "</h6>";
                         }
                         ?>
                     </div>
@@ -164,27 +163,27 @@ include("db.php");
 <!-- Send message -->
 <script type="text/javascript">
     //$(document).ready(function () {
-        $('#sendMSG').submit(function(e) {
-            e.preventDefault();
-            var data = $(this).serialize();
-            $.ajax({
-                type: "POST",
-                url: "send_messages.php",
-                data: data,
-                success: function () {
-                    setTimeout(function () {
-                        $.ajax({
-                            url: "chat_messages.php",
-                            success: function (result) {
-                                // clear form fields
-                                $("#sendMSG").trigger('reset');
-                                $('#chatMsg').html(result);
-                            }
-                        });
-                    }, 0);
-                }
-            });
+    $('#sendMSG').submit(function (e) {
+        e.preventDefault();
+        var data = $(this).serialize();
+        $.ajax({
+            type: "POST",
+            url: "send_messages.php",
+            data: data,
+            success: function () {
+                setTimeout(function () {
+                    $.ajax({
+                        url: "chat_messages.php",
+                        success: function (result) {
+                            // clear form fields
+                            $("#sendMSG").trigger('reset');
+                            $('#chatMsg').html(result);
+                        }
+                    });
+                }, 0);
+            }
         });
+    });
     //});
 </script>
 
@@ -208,6 +207,7 @@ include("db.php");
     function chatNameFunc(temp) {
         document.getElementsByClassName("chat_name").innerHTML = chatRefresh(temp);
     }
+
     // function chatId() {
     //     // changing value with JQuery
     //     $('#chatID').click(function(){
@@ -226,7 +226,7 @@ include("db.php");
                 success: function (result) {
                     var obj = JSON.parse(result);
                     var text = "";
-                    obj.forEach(function(item, i, obj) {
+                    obj.forEach(function (item, i, obj) {
                         //alert( i + ": " + item + " (массив:" + obj[i].msgcont + ")" );
                         console.log(obj[i].msgcont);
                         message = "<span>";
@@ -239,7 +239,7 @@ include("db.php");
                     });
 
                     $('#chatMsg').html(text);
-                       // $('#chatMsg').html(obj[0].msgcont);
+                    // $('#chatMsg').html(obj[0].msgcont);
                     //$('#chatID').val(result2);
                 }
             });
