@@ -61,10 +61,8 @@ include("db.php");
         /* --====================== Else show main content  ==========================-- */
         /* --=============================== Start ===================================-- */
         ?>
-
         <!-- MAIN -->
         <main class="container-fluid p-0 m-0 d-flex">
-
             <aside class="b_blue">
                 <!-- User panel -->
                 <section class="d-flex b_black">
@@ -73,9 +71,8 @@ include("db.php");
                     <div class="mx-3">
                         <img src="" alt="User avatar">
                         <?php
-                        $result = $mysql->query(" SELECT `nickname` FROM `users` WHERE `id` = '23' ");
-                        $row  = $result->fetch_assoc();
-                        echo "<h5 class='mb-1 font-weight-bold'>".$row["nickname"]."</h5>";
+                        // $result = $mysql->query(" SELECT `nickname` FROM `users` WHERE `id` = '23' ");
+                        echo "<h5 class='mb-1 font-weight-bold'>".$_SESSION["username"]."</h5>";
                         ?>
                     </div>
                     <!-- Will open window with create chat form - chat name, avatar, privet or not  -->
@@ -108,6 +105,7 @@ include("db.php");
                 <section class="b_green text_box_wrapper">
                     <form id="sendMSG" action="send_messages.php" method="post" class="d-flex">
                         <textarea name="text_box" placeholder="Type a message..." autofocus></textarea>
+                        <input type="hidden" id="chatID" name="chatID" value="">
                         <input type="submit" value="Send message" this.form.reset()>
                     </form>
                 </section>
@@ -210,6 +208,12 @@ include("db.php");
     function chatNameFunc(temp) {
         document.getElementsByClassName("chat_name").innerHTML = chatRefresh(temp);
     }
+    // function chatId() {
+    //     // changing value with JQuery
+    //     $('#chatID').click(function(){
+    //         $('#chatID').val('2');
+    //     });
+    // }
 
     function chatRefresh(temp) {
         setTimeout(function () {
@@ -220,7 +224,23 @@ include("db.php");
                     "chat_id": temp
                 },
                 success: function (result) {
-                    $('#chatMsg').html(result);
+                    var obj = JSON.parse(result);
+                    var text = "";
+                    obj.forEach(function(item, i, obj) {
+                        //alert( i + ": " + item + " (массив:" + obj[i].msgcont + ")" );
+                        console.log(obj[i].msgcont);
+                        message = "<span>";
+                        // на основании данных о сообщении которые у тебя есть решать красить или не красить
+                        if (i == 2) {
+                            message = "<span style='font-size:20px;'>";
+                        }
+                        message += obj[i].msgcont + "</span><br>";
+                        text += message
+                    });
+
+                    $('#chatMsg').html(text);
+                       // $('#chatMsg').html(obj[0].msgcont);
+                    //$('#chatID').val(result2);
                 }
             });
         }, 0);

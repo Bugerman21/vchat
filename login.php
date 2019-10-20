@@ -28,7 +28,7 @@ $originalUserPSW = $_POST['password'];
         $row = $result->fetch_assoc();
 
         if (($login == $row['login']) && (password_verify($originalUserPSW, $row['password']))) {
-            $_SESSION["username"] = $username;
+            $_SESSION["username"] = $login;
             $_SESSION["password"] = $originalUserPSW;
 
             // echo "Congratulation! <br><a href='index.php'>Back to Home page</a>";
