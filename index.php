@@ -55,10 +55,13 @@ include("db.php");
         </div>
 
         <?php
-    } /* --================================ End ==================================-- */
+    }
+    /* --==================================== End =====================================-- */
+    /* --==============================================================================-- */
+    /* --==============================================================================-- */
+    /* --========================== Else show main content  ===========================-- */
+    /* --=================================== Start ====================================-- */
     else {
-        /* --====================== Else show main content  ==========================-- */
-        /* --=============================== Start ===================================-- */
         ?>
         <!-- MAIN -->
         <main class="container-fluid p-0 m-0 d-flex">
@@ -85,7 +88,7 @@ include("db.php");
                         <?php
                         $result = $mysql->query(" SELECT * FROM `chat` WHERE `chat_name` != '' ");
                         while ($row = $result->fetch_assoc()) {
-                            echo "<h6 class='chat_name' onclick='chatNameFunc(\"" . $row["chat_id"] . "\")'> - " . $row["chat_name"] . "</h6>";
+                            echo "<h6 class='chat_name' onclick='chatRefresh(\"" . $row["chat_id"] . "\")'> - " . $row["chat_name"] . "</h6>";
                         }
                         ?>
                     </div>
@@ -98,9 +101,13 @@ include("db.php");
                     <div class="chat_logo mx-3">Chat avatar</div>
                     <h4>Chat name</h4>
                 </section>
+
+                <!-- Chat message content -->
                 <section id="chatMsg" class="chat_messages">
 
                 </section>
+
+                <!-- Chat text box -->
                 <section class="b_green text_box_wrapper">
                     <form id="sendMSG" action="send_messages.php" method="post" class="d-flex">
                         <textarea name="text_box" placeholder="Type a message..." autofocus></textarea>
@@ -118,7 +125,7 @@ include("db.php");
 
         <?php
     }
-    /* --================================ End ==================================-- */
+    /* --==================================== End =====================================-- */
     ?>
 </div><!-- .wrapper -->
 
@@ -170,53 +177,59 @@ include("db.php");
             type: "POST",
             url: "send_messages.php",
             data: data,
-            success: function () {
-                setTimeout(function () {
-                    $.ajax({
-                        url: "chat_messages.php",
-                        success: function (result) {
-                            // clear form fields
-                            $("#sendMSG").trigger('reset');
-                            $('#chatMsg').html(result);
-                        }
-                    });
-                }, 0);
+            success: function (result) {
+
+                // clear form fields
+                $("#sendMSG").trigger('reset');
+                chatRefresh(result);
             }
         });
     });
     //});
 </script>
 
-<!-- Refresh chat messages -->
+<!-- Chose chat and update chat messages -->
 <script type="text/javascript">
-    // Every 5 seconds, calling to ajax, which replaces in the div a updated content (loop)
-    /*
-    setInterval(function () {
-        $.ajax({
-            url: "chat_messages.php",
-            success: function (result) {
-                $('#chatMsg').html(result);
-            }
-        });
-    }, 10000);
-     */
-</script>
-
-<!-- Chat name onclick event -->
-<script type="text/javascript">
-    function chatNameFunc(temp) {
-        document.getElementsByClassName("chat_name").innerHTML = chatRefresh(temp);
-    }
-
-    // function chatId() {
-    //     // changing value with JQuery
-    //     $('#chatID').click(function(){
-    //         $('#chatID').val('2');
-    //     });
-    // }
+    let myVar
 
     function chatRefresh(temp) {
-        setTimeout(function () {
+        $.ajax({
+            method: "POST",
+            url: "chat_messages.php",
+            data: {
+                "chat_id": temp
+            },
+            success: function (result) {
+                console.log("Original chat id is: " + temp);
+                let obj = JSON.parse(result);
+                let text = "";
+
+                $('#chatID').val(obj[0].chatid);
+
+                obj.forEach(function (item, i, obj) {
+                    message = "<span>";
+                    message += obj[i].msgcont + "</span><br>";
+                    text += message
+                });
+                setTimeout(function () {
+                    $('#chatMsg').html(text);
+                }, 0);
+                test(temp);
+
+                // setInterval(function () {
+                //     $('#chatMsg').html(text);
+                //     console.log("Yahoo");
+                // }, 5000);
+            }
+        });
+    }
+</script>
+
+<!-- Refresh chat messages -->
+<script type="text/javascript">
+    function test(temp) {
+        clearTimeout(myVar);
+        myVar = setInterval(function () {
             $.ajax({
                 method: "POST",
                 url: "chat_messages.php",
@@ -224,27 +237,24 @@ include("db.php");
                     "chat_id": temp
                 },
                 success: function (result) {
-                    var obj = JSON.parse(result);
-                    var text = "";
+                    let obj = JSON.parse(result);
+                    let text = "";
+
+                    $('#chatID').val(obj[0].chatid);
+
                     obj.forEach(function (item, i, obj) {
-                        //alert( i + ": " + item + " (массив:" + obj[i].msgcont + ")" );
-                        console.log(obj[i].msgcont);
                         message = "<span>";
-                        // на основании данных о сообщении которые у тебя есть решать красить или не красить
-                        if (i == 2) {
-                            message = "<span style='font-size:20px;'>";
-                        }
                         message += obj[i].msgcont + "</span><br>";
                         text += message
                     });
 
+                    console.log("Refresh chat id is: " + temp);
                     $('#chatMsg').html(text);
-                    // $('#chatMsg').html(obj[0].msgcont);
-                    //$('#chatID').val(result2);
+
                 }
             });
-        }, 0);
-    }
+        }, 2000);
+    };
 </script>
 
 </body>

@@ -5,24 +5,29 @@ include("db.php");
 // echo "Session status: ".session_status()."<br><br>";
 
 $textBox = filter_var(htmlentities(stripslashes($_POST['text_box'])));
+$chatID = filter_var(htmlentities(stripslashes($_POST['chatID'])));
 
 
 /* --======= If login & password is exist in cookies  =======-- */
 if (isset($_SESSION['username']) == true) {
     // Send message - Validation
     if ($textBox != "") {
-        $result = $mysql->query(" INSERT INTO `messages` (`message_content`) VALUES('$textBox') ");
+        $result = $mysql->query(" INSERT INTO `messages` (`message_content`, `chat_id`) VALUES('$textBox', '$chatID') ");
 
         if ($result != true) {
             echo "Sorry, something went wrong! Please refresh the web page and try send a message again.";
         }
+        else {
+           // var_dump($chatID);
+            echo $chatID;
+        }
     }
 }
 
-$result = $mysql->query(" SELECT * FROM `messages` WHERE 'message_content' != '' ");
-while ($row = $result->fetch_assoc()) {
-    echo $row["message_content"] . "<br>";
-}
+//$result = $mysql->query(" SELECT * FROM `messages` WHERE 'message_content' != '' ");
+//while ($row = $result->fetch_assoc()) {
+//    echo $row["message_content"] . "<br>";
+//}
 
 
 
