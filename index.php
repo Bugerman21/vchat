@@ -99,7 +99,7 @@ include("db.php");
                 <!-- Chat header -->
                 <section class="chat_header d-flex b_black">
                     <div class="chat_logo mx-3">Chat avatar</div>
-                    <h4>Chat name</h4>
+                    <h4 id="headerChatName"></h4>
                 </section>
 
                 <!-- Chat message content -->
@@ -112,6 +112,7 @@ include("db.php");
                     <form id="sendMSG" action="send_messages.php" method="post" class="d-flex">
                         <textarea name="text_box" placeholder="Type a message..." autofocus></textarea>
                         <input type="hidden" id="chatID" name="chatID" value="">
+                        <input type="hidden" name="sender" value="<?php echo $_SESSION['username']?>">
                         <input type="submit" value="Send message" this.form.reset()>
                     </form>
                 </section>
@@ -200,10 +201,9 @@ include("db.php");
                 "chat_id": temp
             },
             success: function (result) {
-                console.log("Original chat id is: " + temp);
                 let obj = JSON.parse(result);
                 let text = "";
-
+                console.log(result);
                 $('#chatID').val(obj[0].chatid);
 
                 obj.forEach(function (item, i, obj) {
@@ -213,13 +213,10 @@ include("db.php");
                 });
                 setTimeout(function () {
                     $('#chatMsg').html(text);
+                    $('#headerChatName').html(obj[0].chatname);
                 }, 0);
                 test(temp);
 
-                // setInterval(function () {
-                //     $('#chatMsg').html(text);
-                //     console.log("Yahoo");
-                // }, 5000);
             }
         });
     }
@@ -248,9 +245,7 @@ include("db.php");
                         text += message
                     });
 
-                    console.log("Refresh chat id is: " + temp);
                     $('#chatMsg').html(text);
-
                 }
             });
         }, 2000);

@@ -6,13 +6,14 @@ include("db.php");
 
 $textBox = filter_var(htmlentities(stripslashes($_POST['text_box'])));
 $chatID = filter_var(htmlentities(stripslashes($_POST['chatID'])));
+$sender = filter_var(htmlentities(stripslashes($_POST['sender'])));
 
 
 /* --======= If login & password is exist in cookies  =======-- */
 if (isset($_SESSION['username']) == true) {
     // Send message - Validation
     if ($textBox != "") {
-        $result = $mysql->query(" INSERT INTO `messages` (`message_content`, `chat_id`) VALUES('$textBox', '$chatID') ");
+        $result = $mysql->query(" INSERT INTO `messages` (`message_content`, `chat_id`, `sender`) VALUES('$textBox', '$chatID', '$sender') ");
 
         if ($result != true) {
             echo "Sorry, something went wrong! Please refresh the web page and try send a message again.";
