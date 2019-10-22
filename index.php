@@ -65,6 +65,7 @@ include("db.php");
         ?>
         <!-- MAIN -->
         <main class="container-fluid p-0 m-0 d-flex">
+            <!-- Left menu: user panel & chats -->
             <aside class="b_blue">
                 <!-- User panel -->
                 <section class="d-flex b_black">
@@ -97,13 +98,13 @@ include("db.php");
 
             <article class="q flex-md-grow-1">
                 <!-- Chat header -->
-                <section class="chat_header d-flex b_black">
+                <section class="chat_header d-flex">
                     <div class="chat_logo mx-3">Chat avatar</div>
                     <h4 id="headerChatName"></h4>
                 </section>
 
                 <!-- Chat message content -->
-                <section id="chatMsg" class="chat_messages">
+                <section id="chatMsg" class="chat_messages b_black">
 
                 </section>
 
@@ -153,12 +154,10 @@ include("db.php");
             data: data,
             success: function () {
                 location.reload();
-                console.log("I am here ! - 1");
                 setTimeout(function () {
                     $.ajax({
                         url: "chat_messages.php",
                         done: function (result) {
-                            console.log("I am here ! - 2");
                             $('#chatMsg').html(result);
                         }
                     });
@@ -203,7 +202,6 @@ include("db.php");
             success: function (result) {
                 let obj = JSON.parse(result);
                 let text = "";
-                console.log(result);
                 $('#chatID').val(obj[0].chatid);
 
                 obj.forEach(function (item, i, obj) {
@@ -238,12 +236,26 @@ include("db.php");
                     let text = "";
 
                     $('#chatID').val(obj[0].chatid);
-
                     obj.forEach(function (item, i, obj) {
-                        message = "<span>";
-                        message += obj[i].msgcont + "</span><br>";
-                        text += message
+                        console.log("<?php echo $_SESSION['login']; ?>");
+                        message = "<div class='msg_wrapper'>" +
+                                        "<div class='msg_cont mb-3'>" +
+                                            "<div class='sender_name_wrap d-flex'>";
+                        if(obj[0].user == "<?php echo $_SESSION['login']; ?>") {
+                            console.log("ya tut");
+                            message += "<div class='b_black px-2'>Avatar</div>" +
+                            "<div class='b_black'>" + obj[0].nick + "</div>";
+                        }
+                        message += "</div>" +
+                                            "<div class='b_green msg'>";
+                        message += obj[i].msgcont + "</div>" + "</div>";
+                        text += message;
                     });
+
+  
+                   // if (obj[0].chatid == $_SESSION['login']){
+
+                   // }
 
                     $('#chatMsg').html(text);
                 }
