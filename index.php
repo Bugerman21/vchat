@@ -220,6 +220,8 @@ include("db.php");
     }
 </script>
 
+
+
 <!-- Refresh chat messages -->
 <script type="text/javascript">
     function test(temp) {
@@ -236,15 +238,18 @@ include("db.php");
                     let text = "";
 
                     $('#chatID').val(obj[0].chatid);
+
+console.log(obj[0]);
+                    console.log(obj[1]);
+
                     obj.forEach(function (item, i, obj) {
-                        console.log("<?php echo $_SESSION['login']; ?>");
                         message = "<div class='msg_wrapper'>" +
                                         "<div class='msg_cont mb-3'>" +
                                             "<div class='sender_name_wrap d-flex'>";
-                        if(obj[0].user == "<?php echo $_SESSION['login']; ?>") {
-                            console.log("ya tut");
+                        if(obj[i].user == "<?php echo $_SESSION['username']; ?>") {
+                            console.log("ya tut: "+ i);
                             message += "<div class='b_black px-2'>Avatar</div>" +
-                            "<div class='b_black'>" + obj[0].nick + "</div>";
+                            "<div class='b_black'>" + obj[0].nick + i + "</div>";
                         }
                         message += "</div>" +
                                             "<div class='b_green msg'>";
@@ -260,7 +265,7 @@ include("db.php");
                     $('#chatMsg').html(text);
                 }
             });
-        }, 2000);
+        }, 5000);
     };
 </script>
 
